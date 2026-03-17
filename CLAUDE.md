@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a collection of independent AI agent projects, each in its own directory:
 
-- `agents/` — Educational course (6-week Master AI Agentic Engineering) with Jupyter notebooks covering multiple frameworks (OpenAI, CrewAI, LangGraph, AutoGen, MCP)
+- `agents_engg/` — Educational course (6-week Master AI Agentic Engineering) with Jupyter notebooks covering multiple frameworks (OpenAI, CrewAI, LangGraph, AutoGen, MCP)
 - `agentic-ai-task-agent/` — Production-style Python library for autonomous task planning using OpenAI function calling
 - `career_ai_assist_agent/` — Gradio chatbot that answers career questions using RAG + function calling
 - `deep_research_agent/` — Multi-agent research system with web search, report writing, and email delivery
@@ -22,7 +22,7 @@ All projects require `OPENAI_API_KEY`. Copy `.env.example` to `.env` and fill in
 pip install -r requirements.txt
 ```
 
-The `agents/` course project uses `pyproject.toml` with `uv`:
+The `agents_engg/` course project uses `pyproject.toml` with `uv`:
 ```bash
 uv pip compile pyproject.toml -o requirements.txt
 pip install -r requirements.txt
@@ -89,8 +89,8 @@ Agent roles, goals, backstories, and LLM assignments live in `config/agents.yaml
 ## Frameworks in Use
 
 - **OpenAI API** — function calling, GPT-4o/4o-mini, OpenAI Agents framework
-- **CrewAI** — multi-agent crews with YAML config (`trendwise_stock_picker`, `agents/3_crew/`)
-- **LangGraph** — stateful graph-based agents (`agents/4_langgraph/`)
-- **AutoGen** — conversation-based agents (`agents/5_autogen/`)
-- **MCP (Model Context Protocol)** — tool servers (`agents/6_mcp/`)
+- **CrewAI** — multi-agent crews with YAML config (`trendwise_stock_picker`, `agents_engg/3_crew/`)
+- **LangGraph** — stateful graph-based agents (`agents_engg/4_langgraph/`)
+- **AutoGen** — conversation-based agents (`agents_engg/5_autogen/`)
+- **MCP (Model Context Protocol)** — tool servers (`agents_engg/6_mcp/`)
 - **Gradio** — web UI for `career_ai_assist_agent` and `deep_research_agent`
