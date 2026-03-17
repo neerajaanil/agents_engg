@@ -4,93 +4,67 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a collection of independent AI agent projects, each in its own directory:
+6-week Master AI Agentic Engineering course repo with Jupyter notebooks and Python examples across multiple agent frameworks:
 
-- `agents_engg/` — Educational course (6-week Master AI Agentic Engineering) with Jupyter notebooks covering multiple frameworks (OpenAI, CrewAI, LangGraph, AutoGen, MCP)
-- `agentic-ai-task-agent/` — Production-style Python library for autonomous task planning using OpenAI function calling
-- `career_ai_assist_agent/` — Gradio chatbot that answers career questions using RAG + function calling
-- `deep_research_agent/` — Multi-agent research system with web search, report writing, and email delivery
-- `trendwise_stock_picker/` — CrewAI-based stock picker with YAML-driven agent configuration
+- `1_foundations/` — Core concepts: OpenAI API basics, function calling, Gradio UI
+- `2_openai/` — OpenAI SDK deep dives
+- `3_crew/` — CrewAI multi-agent examples (debate, coder, stock_picker, financial_researcher, engineering_team)
+- `4_langgraph/` — LangGraph stateful graph-based agents
+- `5_autogen/` — AutoGen conversation-based agents
+- `6_mcp/` — Model Context Protocol server implementations (20+ community projects)
+- `guides/` — Numbered Jupyter guide notebooks (`01_intro.ipynb` through `12_starting_your_project.ipynb`)
+- `setup/` — Platform-specific setup guides (Windows, Mac, Linux)
 
-These are independent projects — each has its own `requirements.txt` and `.env` setup.
+## Setup
 
-## Common Setup
+Requires Python 3.12+. Uses `uv` for dependency management:
 
-All projects require `OPENAI_API_KEY`. Copy `.env.example` to `.env` and fill in values where applicable.
-
-```bash
-pip install -r requirements.txt
-```
-
-The `agents_engg/` course project uses `pyproject.toml` with `uv`:
 ```bash
 uv pip compile pyproject.toml -o requirements.txt
 pip install -r requirements.txt
 ```
 
-## Commands by Project
+Requires `OPENAI_API_KEY`. Create a `.env` file in the repo root.
 
-### agentic-ai-task-agent
+## Running
+
+Launch Jupyter from the repo root:
 ```bash
-pip install -e .                                        # editable install
-pytest tests/                                           # run tests
-pytest tests/ --cov=agentic --cov-report=html          # with coverage
-python -m agentic.cli solve "your problem" --verbose   # CLI usage
-python examples/interactive_demo.py                     # interactive demo
+jupyter lab
 ```
 
-### career_ai_assist_agent
+Some subprojects have standalone Gradio apps:
 ```bash
-python run.py    # starts Gradio UI at http://localhost:7860
-```
-
-### deep_research_agent
-```bash
-python run.py    # starts Gradio UI at http://localhost:7860
-```
-
-### trendwise_stock_picker
-```bash
-python -m trendwise_stock_picker.main
+python app.py    # starts at http://localhost:7860
 ```
 
 ## Architecture Patterns
 
 ### Agentic Loop (function calling)
-Used in `agentic-ai-task-agent`, `career_ai_assist_agent`, `deep_research_agent`:
-- Agent sends problem to LLM → LLM responds with tool calls → Agent executes tools → results fed back to LLM → loop until done
-- Tools are defined as JSON schemas; handlers are separate functions
+LLM receives a problem → responds with tool calls → tools are executed → results fed back → loop until done. Tools are defined as JSON schemas with separate handler functions.
 
-### Multi-Agent Orchestration
-Used in `deep_research_agent` and `trendwise_stock_picker`:
-- Specialized agents (planner, searcher, writer, email sender) with defined roles
-- Context/output passes between agents sequentially
-- `deep_research_agent` uses the OpenAI Agents framework with async processing
-- `trendwise_stock_picker` uses CrewAI with hierarchical delegation
+### CrewAI Multi-Agent (`3_crew/`)
+YAML-driven agents with defined roles, goals, and backstories. Tasks declare dependencies; CrewAI handles sequential or hierarchical execution.
 
-### YAML-Driven Agent Config (trendwise_stock_picker)
-Agent roles, goals, backstories, and LLM assignments live in `config/agents.yaml`; task descriptions and dependencies in `config/tasks.yaml`. Runtime behavior changes by editing YAML, not Python.
+### LangGraph (`4_langgraph/`)
+Stateful agents modeled as directed graphs. Nodes are processing steps; edges define transitions. Supports cycles and conditional routing.
 
-### Memory Management
-- `agentic-ai-task-agent`: `TodoMemory` tracks task state across the agentic loop
-- `career_ai_assist_agent`: conversation history preserved for multi-turn context
-- `trendwise_stock_picker`: CrewAI long-term, short-term, and entity memory
+### MCP (`6_mcp/`)
+Model Context Protocol tool servers. Each community project exposes tools consumable by any MCP-compatible client.
 
 ## Key Environment Variables
 
-| Variable | Used By |
+| Variable | Purpose |
 |----------|---------|
-| `OPENAI_API_KEY` | All projects |
-| `OPENAI_MODEL` | Most projects (default: `gpt-4o-mini`) |
-| `SENDGRID_API_KEY` | `deep_research_agent` (email delivery) |
-| `PUSHOVER_USER` / `PUSHOVER_TOKEN` | `trendwise_stock_picker` (push notifications) |
-| `SERVER_HOST` / `SERVER_PORT` | Gradio-based projects |
+| `OPENAI_API_KEY` | Required by all notebooks/scripts |
+| `OPENAI_MODEL` | Model override (default: `gpt-4o-mini`) |
+| `ANTHROPIC_API_KEY` | Used in some notebooks |
 
 ## Frameworks in Use
 
 - **OpenAI API** — function calling, GPT-4o/4o-mini, OpenAI Agents framework
-- **CrewAI** — multi-agent crews with YAML config (`trendwise_stock_picker`, `agents_engg/3_crew/`)
-- **LangGraph** — stateful graph-based agents (`agents_engg/4_langgraph/`)
-- **AutoGen** — conversation-based agents (`agents_engg/5_autogen/`)
-- **MCP (Model Context Protocol)** — tool servers (`agents_engg/6_mcp/`)
-- **Gradio** — web UI for `career_ai_assist_agent` and `deep_research_agent`
+- **CrewAI** — multi-agent crews with YAML config (`3_crew/`)
+- **LangGraph** — stateful graph-based agents (`4_langgraph/`)
+- **AutoGen** — conversation-based agents (`5_autogen/`)
+- **MCP (Model Context Protocol)** — tool servers (`6_mcp/`)
+- **Gradio** — web UI for interactive demos (`1_foundations/`, some crew projects)
